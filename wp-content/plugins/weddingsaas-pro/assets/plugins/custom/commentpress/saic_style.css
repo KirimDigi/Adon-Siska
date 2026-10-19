@@ -1,0 +1,782 @@
+/*------------------------------------------------------------------*/
+/*-------------------------->>> Fonts <<<-------------------------*/
+/*------------------------------------------------------------------*/
+@font-face {
+    font-family: 'saicfont';
+    src: url("fonts/saicfont.eot");
+    src: url("fonts/saicfont.eot") format("embedded-opentype"), url("fonts/saicfont.ttf") format("truetype"), url("fonts/saicfont.woff") format("woff"), url("fonts/saicfont.svg") format("svg");
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="saico-"],
+[class*=" saico-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'saicfont' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.saico-thumb_down:before {
+    content: "\e8db";
+}
+
+.saico-thumb_up:before {
+    content: "\e8dc";
+}
+
+.saico-music:before {
+    content: "\e900";
+}
+
+.saico-film:before {
+    content: "\e901";
+}
+
+.saico-check:before {
+    content: "\e902";
+}
+
+.saico-close:before {
+    content: "\e903";
+}
+
+.saico-cog:before {
+    content: "\e904";
+}
+
+.saico-trash-o:before {
+    content: "\e905";
+}
+
+.saico-camera:before {
+    content: "\e906";
+}
+
+.saico-spinner:before {
+    content: "\e907";
+}
+
+.saico-spinner2:before {
+    content: "\e908";
+}
+
+.saico-spinner3:before {
+    content: "\e909";
+}
+
+.saico-comment:before {
+    content: "\e90a";
+}
+
+.saico-comments:before {
+    content: "\e90d";
+}
+
+.saico-link:before {
+    content: "\e910";
+}
+
+.saico-refresh:before {
+    content: "\f021";
+}
+
+.saico-arrow_up:before {
+    content: "\e90b";
+}
+
+.saico-arrow_down:before {
+    content: "\e90c";
+}
+
+.saico-loading:before {
+    content: "\e908";
+    -webkit-animation: saicoSpin 1s infinite linear;
+    animation: saicoSpin 1s infinite linear;
+    display: inline-block;
+}
+
+@-webkit-keyframes saicoSpin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes saicoSpin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+/*------------------------------------------------------------------*/
+/*-------------------------->>> General <<<-------------------------*/
+/*------------------------------------------------------------------*/
+body>.saic-wrapper {
+    display: none !important;
+}
+
+.saic-wrapper *,
+.saic-wrapper *:before,
+.saic-wrapper *:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.saic-clearfix:before,
+.saic-clearfix:after {
+    content: " ";
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    font-size: 0;
+    line-height: 0;
+    height: 0;
+}
+
+.saic-clearfix:after {
+    clear: both;
+}
+
+* html .saic-clearfix {
+    zoom: 1;
+}
+
+/* IE6 */
+*:first-child+html .saic-clearfix {
+    zoom: 1;
+}
+
+/* IE7 */
+::-webkit-input-placeholder {
+    color: #BBB !important;
+}
+
+:-moz-placeholder {
+    color: #BBB !important;
+}
+
+:-ms-input-placeholder {
+    color: #BBB !important;
+}
+
+.saic-wrapper input.placeholder,
+textarea.placeholder {
+    color: #BBB !important;
+}
+
+.saic-wrapper .autosize-textarea {
+    line-height: 18px;
+}
+
+.saic-wrapper textarea.autosize-textarea {
+    -webkit-transition: height 0.2s ease 0s;
+    /* Chrome y Safari */
+    -o-transition: height 0.2s ease 0s;
+    /* Opera */
+    -moz-transition: height 0.2s ease 0s;
+    /* Mozilla Firefox */
+    -ms-transition: height 0.2s ease 0s;
+    /* Internet Explorer */
+    transition: height 0.2s ease 0s;
+    /* W3C */
+}
+
+.saic-last {
+    margin-right: 0px !important;
+}
+
+.saic-hide {
+    display: none !important;
+}
+
+.saic-wrapper a {
+    border: none !important;
+}
+
+.saic-wrapper a:focus {
+    outline: none;
+}
+
+.saic-wrapper a {
+    box-shadow: none !important;
+}
+
+/*------------------------------------------------------------------*/
+/*----------------------->>> Principal <<<--------------------------*/
+/*------------------------------------------------------------------*/
+.saic-wrapper {
+    min-width: 180px;
+    width: 100%;
+    background: #F5F7FA;
+    font-size: 16px;
+}
+
+.saic-wrapper.saic-border {
+    border: 1px solid #d5deea;
+    border-radius: 5px;
+}
+
+.saic-wrapper .saic-wrap-comments a:link,
+.saic-wrapper .saic-wrap-comments a:visited {
+    color: #3D7DBC;
+}
+
+.saic-wrapper a:hover {
+    text-decoration: underline;
+}
+
+.saic-wrapper .saic-wrap-comments {
+    display: none;
+    position: relative;
+    width: 100%;
+    height: auto;
+    list-style: none outside none;
+}
+
+/*--------------> Link Mostrar Comentarios <--------------------*/
+.saic-wrapper .saic-wrap-link {
+    text-align: center;
+    width: 100%;
+    padding: 15px;
+}
+
+.saic-wrapper .saic-wrap-link a.saic-link {
+    font-size: 1em;
+    font-weight: bold;
+    color: #3D7DBC;
+    text-decoration: none !important;
+    font-family: inherit;
+}
+
+.saic-wrapper .saic-wrap-link a.saic-link.saic-icon-link-true .saico-comment {
+    padding-right: 6px;
+    color: #3D7DBC;
+}
+
+.saic-wrapper .saic-wrap-link a.saic-link:hover {
+    color: #2a5782;
+}
+
+.saic-wrapper .saic-wrap-link a.saic-link:hover .saico-comment {
+    color: #2a5782;
+}
+
+/*--------------------> Formulario <-----------------------*/
+.saic-wrapper .saic-wrap-form {
+    padding: 20px;
+    border-top: 1px solid #d5deea;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form {
+    position: relative;
+    float: left;
+    width: 100%;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .respond,
+.saic-wrapper .saic-wrap-form .saic-container-form .respond>form {
+    margin: 0px !important;
+    padding: 0px !important;
+    border: 0px !important;
+    background: none !important;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .respond>h3,
+.saic-wrapper .saic-wrap-form .saic-container-form span.saic-required {
+    display: none !important;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .comment-form-author,
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-wrap-attendance,
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-wrap-guest {
+    position: relative;
+    display: block;
+    margin: 0px !important;
+    margin-bottom: 18px !important;
+    width: 100% !important;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form input[type="text"] {
+    width: 100%;
+    margin: 0;
+    padding: 8px 15px !important;
+    border: 1px solid #d5deea;
+    background: #FFFFFF;
+    color: #44525F;
+    box-shadow: none;
+    text-indent: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 1em !important;
+    line-height: 1;
+    vertical-align: top;
+    border-radius: 5px
+}
+
+.saic-select {
+    font-size: 1em;
+    font-family: inherit;
+    color: #c4c4c4;
+    background: #fff;
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid #d5deea;
+    resize: vertical !important;
+    opacity: 1;
+    appearance: auto;
+    padding: 8px 25px 8px 15px !important;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: height .2s;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-transition: height .2s;
+    -moz-transition: height .2s;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-wrap-textarea {
+    clear: both;
+    position: relative;
+    width: 100%;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form textarea.saic-textarea {
+    font-size: 1em !important;
+    font-family: inherit;
+    line-height: 20px;
+    color: #44525F;
+    background: #FFFFFF;
+    width: 100%;
+    height: 75px;
+    min-height: 75px !important;
+    border: 1px solid #d5deea;
+    border-radius: 5px;
+    margin: 0px !important;
+    padding: 8px 15px !important;
+    resize: vertical !important;
+    vertical-align: top;
+    box-shadow: none;
+    box-sizing: border-box;
+    transition: height 0.2s;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-transition: height 0.2s;
+    -moz-transition: height 0.2s;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-wrap-submit {
+    margin-top: 35px;
+    text-align: right;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-wrap-submit p {
+    margin: 0 !important;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form input[type="submit"],
+.saic-wrapper .saic-wrap-form .saic-container-form input[type="button"].saic-form-btn {
+    position: relative;
+    display: inline-block;
+    font-size: 1em !important;
+    font-weight: 600;
+    text-shadow: none;
+    text-align: center;
+    text-transform: none;
+    color: #FFFFFF;
+    background: #3D7DBC;
+    padding: 8px 20px !important;
+    outline: none;
+    overflow: visible;
+    cursor: pointer;
+    border: 0;
+    border-radius: 3px;
+    vertical-align: top;
+    box-shadow: none;
+    box-sizing: border-box;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form input[type="submit"]:hover,
+.saic-wrapper .saic-wrap-form .saic-container-form input[type="button"].saic-form-btn:hover {
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    outline: none;
+    background: #4d8ac5;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form input[type="button"].saic-form-btn {
+    display: none;
+    background: #D90A11;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form input[type="button"].saic-form-btn:hover {
+    background: #d15a5e;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-error {
+    border: 1px solid #C85951 !important;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-error-info {
+    display: none;
+    position: absolute;
+    bottom: 28px;
+    left: 8px;
+    z-index: 99999;
+    height: 20px;
+    padding: 1px 10px 0 10px;
+    line-height: 1.6;
+    color: #FFF;
+    font-family: inherit;
+    font-size: 0.7em;
+    font-weight: bold;
+    text-align: center;
+    background: #C85951;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -khtml-border-radius: 3px;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-error-info:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -4px;
+    width: 0;
+    height: 0;
+    border-top: 4px solid #C85951;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-wrap-textarea .saic-error-info {
+    left: auto;
+    right: 5px;
+    top: 5px;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-wrap-textarea .saic-error-info:after {
+    top: 50%;
+    right: 100%;
+    left: auto;
+    margin-left: 0px;
+    margin-top: -5px;
+    border-right: 5px solid #C85951;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+.saic-wrapper .saic-wrap-form .saic-container-form input.saic-input:focus,
+.saic-wrapper .saic-wrap-form .saic-container-form textarea.saic-textarea:focus,
+.saic-wrapper .saic-wrap-form .saic-container-form .saic-select:focus {
+    border-color: #64B6EC;
+    outline: 0 none;
+}
+
+/*--------------------> Mensajes <-----------------------*/
+.saic-wrapper .saic-comment-status {
+    clear: both;
+    position: relative;
+    display: none;
+    padding: 8px 36px;
+    border-top: 1px solid #d5deea;
+    text-align: center;
+}
+
+.saic-wrapper .saic-comment-status p {
+    font-family: inherit;
+    font-size: 1em;
+    padding-bottom: 0px;
+    padding-right: 10px;
+    margin: 0px !important;
+    line-height: 18px;
+    font-weight: bold;
+}
+
+.saic-wrapper .saic-comment-status p.saic-ajax-success {
+    color: #319342;
+}
+
+.saic-wrapper .saic-comment-status p.saic-ajax-error {
+    color: #C85951;
+}
+
+.saic-wrapper .saic-comment-status.saic-loading {
+    height: 32px;
+}
+
+.saic-wrapper .saic-comment-status.saic-loading>span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin-left: -8px;
+    margin-top: -8px;
+    font-size: 16px;
+    color: #3D7DBC;
+}
+
+/*------------------> Comentarios <------------------------*/
+.saic-wrapper ul.saic-container-comments {
+    clear: both;
+    display: none;
+    padding: 0px;
+    margin: 0px !important;
+    border-top: 1px solid #d5deea;
+    list-style: none outside none !important;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment {
+    position: relative;
+    min-height: 32px;
+    padding: 10px 20px 6px !important;
+    margin: 0px !important;
+    border-bottom: 1px solid #d5deea;
+    list-style: none outside none !important;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment:last-child {
+    border-bottom: none;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment ul {
+    margin: 0 0 0 36px;
+    padding: 5px 0 0;
+    list-style: none outside none !important;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment ul li.saic-item-comment {
+    padding-left: 0px !important;
+    padding-right: 15px !important;
+    margin: 0px;
+    margin-right: -15px !important;
+    border-top: 1px solid #d5deea;
+    border-bottom: none;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment ul li.saic-item-comment:last-child {
+    padding-bottom: 0px !important;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-avatar {
+    float: left;
+    padding-top: 5px;
+    overflow: hidden;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-avatar img {
+    max-width: 28px;
+    max-height: 28px;
+    margin: 0px !important;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border: none;
+    border-radius: 50%
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment ul .saic-comment-avatar img {
+    max-width: 25px;
+    max-height: 25px;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment ul ul .saic-comment-avatar img {
+    max-width: 23px;
+    max-height: 23px;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content {
+    position: relative;
+    margin-left: 38px;
+    padding-bottom: .65em;
+    padding-left: 0px !important;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-info {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    line-height: 1.6;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-info .saic-commenter-name {
+    color: #3D7DBC !important;
+    font-size: 1em;
+    font-weight: bold;
+    text-decoration: none !important;
+    font-family: inherit;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-info .saic-author-mark {
+    line-height: .5;
+    margin-left: 6px;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-text p {
+    font-size: 1em;
+    font-family: inherit;
+    color: #44525F;
+    line-height: 1.6;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-text p:last-child {
+    margin-bottom: 0px !important;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-text img.wp-smiley {
+    vertical-align: sub;
+    margin: 0px;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-time {
+    font-size: 0.8em;
+    font-family: inherit;
+    font-style: italic;
+    color: #9DA8B7;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-actions {
+    margin-bottom: -10px;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-actions a {
+    text-decoration: none;
+    font-size: 0.8em;
+    padding: 0 3px;
+    font-weight: bold;
+    font-family: inherit;
+    color: #3D7DBC;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-actions a:hover {
+    text-decoration: underline;
+    color: #2a5782;
+}
+
+.saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-actions a:first-child {
+    padding-left: 0px;
+}
+
+/*------------------------------------------------------------------*/
+/*--------------->>> CSS Textarea Counter <<<-----------------------*/
+/*------------------------------------------------------------------*/
+.saic-wrapper .saic-counter-info {
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    text-align: right;
+    line-height: 15px;
+    color: #9DA8B7;
+    font-size: 1em;
+    font-family: inherit;
+    margin-top: 6px;
+}
+
+.saic-wrapper .saic-counter-info.saic-counter-warn {
+    color: #E10000 !important;
+}
+
+/*------------------------------------------------------------------*/
+/*--------------------->>> CSS jPages <<<---------------------------*/
+/*------------------------------------------------------------------*/
+.saic-wrapper .saic-holder {
+    display: none;
+    margin: 0;
+    padding: 8px 10px 10px 2px;
+    text-align: center;
+}
+
+.saic-wrapper .saic-holder a,
+.saic-wrapper .saic-holder span {
+    margin: 0 8px;
+}
+
+.saic-wrapper .saic-holder span {
+    color: #3D7DBC;
+    font-size: 18px;
+}
+
+.saic-wrapper .saic-holder a,
+.saic-wrapper .saic-holder a:link,
+.saic-wrapper .saic-holder a:visited {
+    color: #3D7DBC;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 1em;
+    font-family: inherit;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.saic-wrapper .saic-holder a:hover,
+.saic-wrapper .saic-holder a:link:hover,
+.saic-wrapper .saic-holder a:visited:hover {
+    color: #2a5782;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.saic-wrapper .saic-holder a.jp-current,
+.saic-wrapper .saic-holder a.jp-current:hover {
+    font-weight: bold;
+    text-decoration: underline;
+    cursor: default;
+}
+
+.saic-wrapper .saic-holder a.jp-previous,
+.saic-wrapper .saic-holder a.jp-next {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.saic-wrapper .saic-holder a.jp-previous.jp-disabled,
+.saic-wrapper .saic-holder a.jp-previous.jp-disabled:hover,
+.saic-wrapper .saic-holder a.jp-next.jp-disabled,
+.saic-wrapper .saic-holder a.jp-next.jp-disabled:hover {
+    color: #9DA8B7;
+    cursor: default;
+    font-weight: normal;
+}
+
+.saic-wrapper .saic-holder a.jp-previous {
+    margin-right: 8px;
+}
+
+.saic-wrapper .saic-holder a.jp-next {
+    margin-left: 8px;
+}
