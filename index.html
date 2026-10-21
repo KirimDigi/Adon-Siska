@@ -2909,7 +2909,7 @@ continually, You.</p>				</div>
 
 		<div id="saic-comment-status-4689" class="saic-comment-status"></div>
 
-		<ul id="saic-container-comment-4689" class="saic-container-comments saic-order-DESC saic-has-1-comments saic-multiple-comments" data-order="DESC"></ul>
+		<ul id="saic-container-comment-4689" class="saic-container-comments saic-order-DESC saic-has-1-comments saic-multiple-comments" data-order="DESC" style="display:none;"><li class="saic-item-comment"><div class="saic-comment-content"><div class="saic-comment-info"><span class="saic-commenter-name">Kirimdigi</span><span style="margin-left:8px;font-size:.8em;font-style:italic;color:#41444B">Tidak Hadir</span></div><div class="saic-comment-text"><p>Selamat Menua Bersama..</p></div><div class="saic-comment-time">19 Oct 2026 21:48</div></div></li></ul>
 
 		<div class="saic-holder-4689 saic-holder"></div>
 
@@ -2920,7 +2920,7 @@ continually, You.</p>				</div>
 				</div>
 				</div>
 				</div>
-		<div class="elementor-element elementor-element-3f6c8ae e-con-full e-flex e-con e-child" data-id="3f6c8ae" data-element_type="container" data-e-type="container" data-settings="{&quot;background_background&quot;:&quot;slideshow&quot;,&quot;jet_parallax_layout_list&quot;:[],&quot;background_slideshow_transition_duration&quot;:2000,&quot;background_slideshow_ken_burns&quot;:&quot;yes&quot;,&quot;background_slideshow_gallery&quot;:[{&quot;id&quot;:&quot;5069&quot;,&quot;url&quot;:&quot;wp-content\/uploads\/2025\/03\/akhir-1.jpeg&quot;},{&quot;id&quot;:&quot;5070&quot;,&quot;url&quot;:&quot;wp-content\/uploads\/2025\/03\/akhir-2.jpeg&quot;}],&quot;background_slideshow_loop&quot;:&quot;yes&quot;,&quot;background_slideshow_slide_duration&quot;:5000,&quot;background_slideshow_slide_transition&quot;:&quot;fade&quot;,&quot;background_slideshow_ken_burns_zoom_direction&quot;:&quot;in&quot;}">
+		<div class="elementor-element elementor-element-3f6c8ae e-con-full e-flex e-con e-child" data-id="3f6c8ae" data-element_type="container" data-e-type="container" data-settings="{&quot;background_background&quot;:&quot;slideshow&quot;,&quot;jet_parallax_layout_list&quot;:[],&quot;background_slideshow_transition_duration&quot;:2000,&quot;background_slideshow_ken_burns&quot;:&quot;yes&quot;,&quot;background_slideshow_gallery&quot;:[{&quot;id&quot;:&quot;5069&quot;,&quot;url&quot;:&quot;wp-content\/uploads\/2025\/03\/akhir-1.jpeg&quot;},{&quot;id&quot;:&quot;5070&quot;,&quot;url&quot;:&quot;wp-content\/uploads\/2025\/03\/akhir-2.jpeg&quot;}],&quot;background_slideshow_loop&quot;:&quot;yes&quot;,&quot;background_slideshow_slide_duration&quot;:5000,&quot;background_slideshow_slide_transition&quot;:&quot;fade&quot;,&quot;background_slideshow_ken_burns_zoom_direction&quot;:&quot;out&quot;}">
 		<div class="elementor-element elementor-element-9e4262f e-con-full e-flex e-con e-child" data-id="9e4262f" data-element_type="container" data-e-type="container" data-settings="{&quot;jet_parallax_layout_list&quot;:[]}">
 				<div class="elementor-element elementor-element-92be126 elementor-widget elementor-widget-spacer" data-id="92be126" data-element_type="widget" data-e-type="widget" data-widget_type="spacer.default">
 				<div class="elementor-widget-container">
@@ -3134,8 +3134,10 @@ window.KD_RSVP = { url: "https://script.google.com/macros/s/AKfycbz7RcCAK3ELtGST
   var W = window;
   W.KD_RSVP = W.KD_RSVP || { url: '', timeout: 12000 };
   var seq = 0;
-  var shown = {};   // post_id -> daftar ucapan sedang tampil?
-  var counts = {};  // post_id -> jumlah ucapan
+  var shown = {};      // post_id -> boolean
+  var counts = {};     // post_id -> number
+  var isLoading = {};  // post_id -> boolean
+  var hasLoaded = {};  // post_id -> boolean
   var ATTLABEL = { present: 'Hadir', notpresent: 'Tidak Hadir', notsure: 'Masih Ragu' };
 
   function $() { return W.jQuery || W.$; }
@@ -3161,23 +3163,37 @@ window.KD_RSVP = { url: "https://script.google.com/macros/s/AKfycbz7RcCAK3ELtGST
       + (c.time ? '<div class="saic-comment-time">' + esc(c.time) + '</div>' : '')
       + '</div></li>';
   }
+
   function toggleLabel(post_id) {
     var j = $(); if (!j) return;
     var btn = j('#kd-toggle-ucapan-' + post_id);
     if (!btn.length) return;
-    var n = (typeof counts[post_id] !== 'undefined') ? counts[post_id] : 1;
+    if (isLoading[post_id]) {
+      btn.html('<i class="fa-solid fa-spinner fa-spin" style="margin-right:6px;"></i>Memuat ucapan...');
+      return;
+    }
+    var n = (typeof counts[post_id] !== 'undefined') ? counts[post_id] : (j('ul#saic-container-comment-' + post_id + ' > li').length || 1);
     var txt = shown[post_id] ? 'Sembunyikan Ucapan' : 'Tampilkan Ucapan';
     if (n && !shown[post_id]) txt += ' (' + n + ')';
     btn.text(txt);
   }
+
   function applyVis(post_id) {
     var j = $(); if (!j) return;
     var on = !!shown[post_id];
-    j('ul#saic-container-comment-' + post_id).toggle(on);
+    var list = j('ul#saic-container-comment-' + post_id);
+    if (on) {
+      list.attr('style', 'display:block !important');
+    } else {
+      list.attr('style', 'display:none !important');
+    }
     var holder = j('div.saic-holder-' + post_id);
-    if (holder.length) holder.toggle(on);
+    if (holder.length) {
+      if (on) holder.show(); else holder.hide();
+    }
     toggleLabel(post_id);
   }
+
   function setCount(post_id, n) {
     var j = $(); if (!j) return;
     counts[post_id] = n;
@@ -3189,37 +3205,57 @@ window.KD_RSVP = { url: "https://script.google.com/macros/s/AKfycbz7RcCAK3ELtGST
     }
     toggleLabel(post_id);
   }
+
   function rePage(post_id, destroy) {
     if (typeof W.jPages_SAIC === 'function') {
       W.jPages_SAIC(post_id, (W.WDS_RSVP && W.WDS_RSVP.jPagesNum) || 10, !!destroy);
     }
   }
 
-  W.getComments_SAIC = function (post_id, num_comments, num_get_comments, order_comments) {
+  W.getComments_SAIC = function (post_id, callback) {
     var j = $(); if (!j) return false;
     var url = base();
     var status = j('#saic-comment-status-' + post_id);
     var list = j('ul#saic-container-comment-' + post_id);
-    if (!url) { status.removeClass('saic-loading').html('').hide(); return false; }
+    if (!url) {
+      status.removeClass('saic-loading').html('').hide();
+      isLoading[post_id] = false;
+      toggleLabel(post_id);
+      if (typeof callback === 'function') callback(false);
+      return false;
+    }
 
-    status.addClass('saic-loading').html('<span class="saico-loading"></span>').show();
+    isLoading[post_id] = true;
+    toggleLabel(post_id);
+    status.addClass('saic-loading').html('<div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;color:#410101;font-weight:600;"><i class="fa-solid fa-spinner fa-spin"></i> Memuat ucapan...</div>').show();
+
     var cb = 'kd_rsvp_cb_' + (++seq);
     var done = false;
     var script = document.createElement('script');
 
     function finish(ok, data) {
-      if (done) return; done = true;
+      if (done) return;
+      done = true;
+      isLoading[post_id] = false;
       status.removeClass('saic-loading').html('').hide();
       try { delete W[cb]; } catch (e) { W[cb] = undefined; }
       if (script.parentNode) script.parentNode.removeChild(script);
-      if (!ok || !data || !data.comments) return;
-      var html = '';
-      for (var i = 0; i < data.comments.length; i++) html += item(data.comments[i]);
-      list.html(html);
-      var cCount = (typeof data.count !== 'undefined') ? data.count : (data.comments ? data.comments.length : 0);
-      setCount(post_id, cCount);
-      rePage(post_id, false);
+
+      if (ok && data && data.comments) {
+        hasLoaded[post_id] = true;
+        var html = '';
+        for (var i = 0; i < data.comments.length; i++) html += item(data.comments[i]);
+        if (html) list.html(html);
+        var cCount = (typeof data.count !== 'undefined') ? data.count : (data.comments ? data.comments.length : 0);
+        setCount(post_id, cCount);
+        rePage(post_id, false);
+      } else {
+        // Fallback: hitung ucapan yang sudah ada di list
+        var existingCount = list.find('> li').length || 1;
+        setCount(post_id, existingCount);
+      }
       applyVis(post_id);
+      if (typeof callback === 'function') callback(ok, data);
     }
 
     W[cb] = function (data) { finish(true, data); };
@@ -3257,7 +3293,7 @@ window.KD_RSVP = { url: "https://script.google.com/macros/s/AKfycbz7RcCAK3ELtGST
       .show();
     list.prepend(item({
       name: data.author, attendance: data.attendance, guest: data.guest,
-      comment: data.comment, time: ''
+      comment: data.comment, time: 'Baru saja'
     }));
 
     try {
@@ -3269,7 +3305,7 @@ window.KD_RSVP = { url: "https://script.google.com/macros/s/AKfycbz7RcCAK3ELtGST
     var a = form.find('[name=attendance]'); if (a.length) a.get(0).selectedIndex = 0;
 
     shown[post_id] = true;                       // tampilkan ucapan setelah kirim
-    setCount(post_id, (counts[post_id] || 0) + 1);
+    setCount(post_id, (counts[post_id] || list.find('> li').length || 0) + 1);
     rePage(post_id, true);
     applyVis(post_id);
 
@@ -3282,12 +3318,24 @@ window.KD_RSVP = { url: "https://script.google.com/macros/s/AKfycbz7RcCAK3ELtGST
     jq(document).on('click', '.kd-ucapan-toggle', function (e) {
       e.preventDefault();
       var post = String(jq(this).attr('data-post') || '4689');
-      shown[post] = !shown[post];
-      applyVis(post);
+      if (shown[post]) {
+        // Sedang terbuka, tutup
+        shown[post] = false;
+        applyVis(post);
+      } else {
+        // Mau dibuka: set shown = true
+        shown[post] = true;
+        applyVis(post);
+        // Jika belum selesai fetch data terbaru dari Google Apps Script, fetch sekarang
+        if (!hasLoaded[post] && !isLoading[post]) {
+          W.getComments_SAIC(post);
+        }
+      }
       return false;
     });
 
     jq(document).ready(function() {
+      // Background initial fetch
       W.getComments_SAIC('4689');
     });
   }
