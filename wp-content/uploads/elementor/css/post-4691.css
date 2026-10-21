@@ -61,7 +61,7 @@
 
 /* Rubah Warna Ucapan */
 .saic-wrapper .saic-wrap-link a.saic-link {
-    color:#1C3879;
+    color:#410101;
         font-size: 13px;
 font-family: poppins;
 }
@@ -69,14 +69,14 @@ font-family: poppins;
 
 /* Rubah Warna Ucapan Hover */
 .saic-wrapper .saic-wrap-link a.saic-link:hover {
-    color:#1C3879;
+    color:#5a0303;
     font-size: 13px;
 }
 /* Rubah Warna Ucapan Hover */
 
 /* Rubah Warna Icon Ucapan */
 .saic-wrapper .saic-wrap-link a.saic-link.saic-icon-link-true .saico-comment {
-        color:#1C3879;
+        color:#410101;
         font-size: 13px;
         
 }
@@ -92,17 +92,27 @@ font-family: poppins;
 
 /* Rubah Warna Tombol Kirim */
 .saic-wrapper .saic-wrap-form .saic-container-form input[type="submit"], .saic-wrapper .saic-wrap-form .saic-container-form input[type="button"].saic-form-btn {
-    background-color: #1C3879;
+    background-color: #410101;
 }
 /* Rubah Warna Tombol Kirim */
 .saic-wrapper .saic-wrap-form .saic-container-form input[type="submit"], .saic-wrapper .saic-wrap-form .saic-container-form input[type="button"].saic-form-btn:hover {
-    background-color: #1C3879;
+    background-color: #5a0303;
     color: #fff;
 }
 #submit-4926{
     background-color: #E5AE6B;
 }
 /* Rubah Warna Tombol Kirim */
+
+.kd-ucapan-toggle {
+    background-color: #410101 !important;
+    color: #FFFFFF !important;
+    transition: background-color 0.2s ease;
+}
+.kd-ucapan-toggle:hover {
+    background-color: #5a0303 !important;
+    color: #FFFFFF !important;
+}
 
 /* Rubah Warna Nama Pengirim */
 .saic-wrapper ul.saic-container-comments li.saic-item-comment .saic-comment-content .saic-comment-info .saic-commenter-name {
