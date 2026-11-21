@@ -1730,10 +1730,10 @@ apply();
 				<div class="elementor-widget-container">
 					<h2 class="elementor-heading-title elementor-size-default">Di Tempat</h2>				</div>
 				</div>
-				<div class="elementor-element elementor-element-5051a67f elementor-align-center elementor-widget elementor-widget-button" data-id="5051a67f" data-element_type="widget" data-e-type="widget" id="tombolbuka" data-widget_type="button.default">
+				<div class="elementor-element elementor-element-5051a67f elementor-align-center elementor-widget elementor-widget-button wds-button-cover" data-id="5051a67f" data-element_type="widget" data-e-type="widget" id="tombolbuka" data-widget_type="button.default" style="cursor: pointer;">
 				<div class="elementor-widget-container">
 									<div class="elementor-button-wrapper">
-					<a class="elementor-button elementor-size-xs" role="button">
+					<a class="elementor-button elementor-size-xs wds-button-cover" role="button" href="javascript:void(0);" style="cursor: pointer;">
 						<span class="elementor-button-content-wrapper">
 						<span class="elementor-button-icon">
 				<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 512 512"><defs><style>.fa-secondary{opacity:.4}</style></defs><path class="fa-primary" d="M511.8 202.5c-1.6-18.1-10.9-34.9-25.7-45.8L448 128.5v79.6 41.6l63.8-47.2zM512 448V242.1L294.4 403.3C283.3 411.6 269.8 416 256 416s-27.3-4.4-38.4-12.7L0 242.1V448v0c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64v0zM64 249.7V208.1l0-79.6L25.9 156.7C11.1 167.6 1.8 184.4 .2 202.5L64 249.7zM289.5 11.1C279.8 3.9 268.1 0 256 0s-23.8 3.9-33.5 11L194.2 32H317.8L289.5 11.1zM176 128c-8.8 0-16 7.2-16 16s7.2 16 16 16H336c8.8 0 16-7.2 16-16s-7.2-16-16-16H176zm0 64c-8.8 0-16 7.2-16 16s7.2 16 16 16H336c8.8 0 16-7.2 16-16s-7.2-16-16-16H176z"></path><path class="fa-secondary" d="M96 32C78.3 32 64 46.3 64 64V249.7L236.7 377.6c5.6 4.1 12.4 6.4 19.3 6.4s13.7-2.2 19.3-6.4L448 249.7V64c0-17.7-14.3-32-32-32H96zm80 96H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16s7.2-16 16-16zm0 64H336c8.8 0 16 7.2 16 16s-7.2 16-16 16H176c-8.8 0-16-7.2-16-16s7.2-16 16-16z"></path></svg>			</span>
@@ -1879,44 +1879,196 @@ apply();
 <script>
 let ytMusicPlaying = false;
 let isYT = false;
-const discMusics = document.querySelectorAll(".elementor-icon-wrapper[id*=mute-sound] .elementor-icon i");
+let isInvitationOpened = false;
+let userManuallyPaused = false;
 const topSectionEl = document.querySelectorAll(".elementor-top-section");
-document.addEventListener('DOMContentLoaded', ()=>{
-    var v = document.querySelector('.elementor-background-video-container video');
-    if (v) {
-        v.removeAttribute('autoplay');
-        v.preload = 'auto';
-    }
-})
+
+addEventListener('beforeunload', () => {
+    window.scrollTo(0,0);
+});
+function disableScroll() {
+    document.body.classList.add("stop-scrolling");
+}
+function enableScroll() {
+    document.body.classList.remove("stop-scrolling");
+}
 disableScroll();
+
 function hideAllSect(){
     if ( document.body.classList.contains('elementor-editor-active') ) return;
     for (const elSect of topSectionEl) {
-      if (elSect.matches("#cover")) {
-        continue;
-      }
+      if (elSect.matches("#cover")) continue;
       elSect.style.display = "none";
     }
 }
 function showAllSect(){
     for (const elSect of topSectionEl) {
-      if (elSect.matches("#cover")) {
-        continue;
-      }
+      if (elSect.matches("#cover")) continue;
       elSect.style.display = "";
     }
 }
-document.getElementById("tombolbuka").onclick=function(){
+
+// Sinkronisasi status UI tombol audio (ikon berputar & switch play/pause)
+function updateAudioUI(isPlaying) {
+  ytMusicPlaying = isPlaying;
+  var playBtn = document.getElementById("wds_audio_play");
+  var pauseBtn = document.getElementById("wds_audio_pause");
+  if (playBtn && pauseBtn) {
+    if (isPlaying) {
+      playBtn.style.display = "block";
+      pauseBtn.style.display = "none";
+      playBtn.classList.add("audioRotate");
+    } else {
+      playBtn.style.display = "none";
+      pauseBtn.style.display = "block";
+      playBtn.classList.remove("audioRotate");
+    }
+  }
+  var discMusics = document.querySelectorAll(".elementor-icon-wrapper[id*=mute-sound] .elementor-icon i, .elementor-widget-wds_audio .elementor-icon");
+  discMusics.forEach(function(d) {
+    if (isPlaying) d.classList.add("audioRotate");
+    else d.classList.remove("audioRotate");
+  });
+}
+
+// Unlock audio engine di iOS Safari / WebKit
+function unlockAudioEngine() {
+  try {
+    var AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (AudioCtx) {
+      if (!window._kdAudioCtx) {
+        window._kdAudioCtx = new AudioCtx();
+      }
+      if (window._kdAudioCtx.state === 'suspended') {
+        window._kdAudioCtx.resume();
+      }
+    }
+  } catch(e) {}
+}
+
+function _playAudio() {
+  userManuallyPaused = false;
+  unlockAudioEngine();
+
+  var songEl = document.getElementById("song");
+  if (songEl) {
+    isYT = false;
+    songEl.muted = false;
+
+    // Pastikan currentTime di-set aman tanpa memicu InvalidStateError di iOS WebKit
+    var setStart = function() {
+      if (songEl.currentTime < 10 || songEl.currentTime >= 207) {
+        try { songEl.currentTime = 10; } catch(e){}
+      }
+    };
+
+    if (songEl.readyState >= 1) {
+      setStart();
+    } else {
+      songEl.addEventListener('loadedmetadata', setStart, { once: true });
+      songEl.addEventListener('canplay', setStart, { once: true });
+    }
+
+    // Eksekusi play() sinkron langsung di stack event klik/tap pengguna (krusial untuk iPhone)
+    var promise = songEl.play();
+    if (promise !== undefined) {
+      promise.then(function() {
+        setStart();
+        updateAudioUI(true);
+      }).catch(function(err) {
+        console.warn("Autoplay ditunda oleh kebijakan browser:", err);
+        // Fallback: unlock pada sentuhan berikutnya di layar
+        armFallbackUnlock(songEl);
+      });
+    } else {
+      updateAudioUI(true);
+    }
+  } else {
+    isYT = true;
+    try {
+      if (window.jQuery) {
+        jQuery("iframe").each(function() {
+          if (this.id === 'youtube-player' && this.contentWindow) {
+            this.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+          }
+        });
+      }
+    } catch(e){}
+    updateAudioUI(true);
+  }
+}
+
+function armFallbackUnlock(songEl) {
+  var unlockHandler = function() {
+    if (!userManuallyPaused && songEl && songEl.paused) {
+      unlockAudioEngine();
+      songEl.play().then(function() {
+        if (songEl.currentTime < 10 || songEl.currentTime >= 207) {
+          try { songEl.currentTime = 10; } catch(e){}
+        }
+        updateAudioUI(true);
+      }).catch(function(){});
+    }
+    ['touchstart', 'touchend', 'click'].forEach(function(evt) {
+      document.removeEventListener(evt, unlockHandler, true);
+    });
+  };
+  ['touchstart', 'touchend', 'click'].forEach(function(evt) {
+    document.addEventListener(evt, unlockHandler, { capture: true, once: true });
+  });
+}
+
+function _pauseAudio() {
+  userManuallyPaused = true;
+  var songEl = document.getElementById("song");
+  if (songEl) {
+    try { songEl.pause(); } catch(e){}
+    isYT = false;
+  } else {
+    isYT = true;
+    try {
+      if (window.jQuery) {
+        jQuery("iframe").each(function() {
+          if (this.id === 'youtube-player' && this.contentWindow) {
+            this.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+          }
+        });
+      }
+    } catch(e){}
+  }
+  updateAudioUI(false);
+}
+
+function _toggleAudio() {
+  var songEl = document.getElementById("song");
+  if (songEl) {
+    if (songEl.paused) _playAudio();
+    else _pauseAudio();
+  } else {
+    if (ytMusicPlaying) _pauseAudio();
+    else _playAudio();
+  }
+}
+
+function handleBukaUndangan(e) {
+  if (e && e.type === 'touchstart') {
+    // izinkan gesture berjalan
+  }
+  if (isInvitationOpened) return;
+  isInvitationOpened = true;
+
   enableScroll();
+
+  // 1. Jalankan audio seketika dalam user gesture stack (krusial untuk iPhone / iOS Safari)
   _playAudio();
 
-  // 1. Langsung jalankan video motion tanpa jeda/patah
+  // 2. Jalankan background video tanpa jeda
   var bgVideo = document.querySelector('.elementor-background-video-container video');
   if (bgVideo) {
     bgVideo.muted = true;
     bgVideo.setAttribute('playsinline', 'playsinline');
     bgVideo.setAttribute('webkit-playsinline', 'webkit-playsinline');
-    bgVideo.currentTime = 0;
+    try { bgVideo.currentTime = 0; } catch(err){}
     var playPromise = bgVideo.play();
     if (playPromise !== undefined) {
       playPromise.catch(function(){});
@@ -1925,7 +2077,7 @@ document.getElementById("tombolbuka").onclick=function(){
 
   showAllSect();
 
-  // 2. Transisi pembukaan cover yang halus 60fps dengan GPU acceleration
+  // 3. Animasi cover keluar dengan smooth GPU acceleration
   var cover = document.getElementById("cover");
   if (cover) {
     cover.style.willChange = "transform, opacity";
@@ -1936,90 +2088,82 @@ document.getElementById("tombolbuka").onclick=function(){
       cover.style.display = "none";
     }, 1150);
   } else {
-    jQuery("#cover").fadeOut(800);
+    if (window.jQuery) jQuery("#cover").fadeOut(800);
   }
-};
-discMusics.forEach((disc) => {
-    disc.onclick=function(){
-        _pauseAudio();
-    };
-})
-document.addEventListener("DOMContentLoaded", function(){
-    var songEl = document.getElementById("song");
-    if(!songEl) return;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  var songEl = document.getElementById("song");
+  if (songEl) {
     songEl.loop = false;
-    songEl.addEventListener("play", function(){
-        if(songEl.currentTime < 10 || songEl.currentTime >= 207){ songEl.currentTime = 10; }
-    });
-    songEl.addEventListener("timeupdate", function(){
-        if(songEl.currentTime >= 207){
-            songEl.pause();
-            songEl.currentTime = 10;
-            ytMusicPlaying = false;
-            discMusics.forEach(function(d){ d.classList.remove("audioRotate"); });
-            try{
-                if(window.jQuery){ jQuery("#wds_audio_play").show(); jQuery("#wds_audio_pause").hide(); }
-            }catch(e){}
+    songEl.addEventListener("timeupdate", function() {
+      if (songEl.currentTime >= 207) {
+        try { songEl.currentTime = 10; } catch(e){}
+        if (!userManuallyPaused) {
+          songEl.play().catch(function(){});
+        } else {
+          songEl.pause();
+          updateAudioUI(false);
         }
+      }
     });
-})
+    songEl.addEventListener("ended", function() {
+      try { songEl.currentTime = 10; } catch(e){}
+      if (!userManuallyPaused) {
+        songEl.play().catch(function(){});
+      }
+    });
+  }
 
+  // Bind tombol buka undangan ke semua event sentuhan & klik
+  var btn = document.getElementById("tombolbuka");
+  if (btn) {
+    btn.addEventListener("click", handleBukaUndangan);
+    btn.addEventListener("touchend", handleBukaUndangan, { passive: true });
+    var innerA = btn.querySelector("a");
+    if (innerA) {
+      innerA.addEventListener("click", handleBukaUndangan);
+      innerA.addEventListener("touchend", handleBukaUndangan, { passive: true });
+    }
+  }
 
+  // Bind floating music control
+  var playBtn = document.getElementById("wds_audio_play");
+  var pauseBtn = document.getElementById("wds_audio_pause");
+  [playBtn, pauseBtn].forEach(function(el) {
+    if (el) {
+      el.addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        _toggleAudio();
+      });
+    }
+  });
 
-
-
-
-addEventListener('beforeunload', () => {
-    window.scrollTo(0,0)
+  var v = document.querySelector('.elementor-background-video-container video');
+  if (v) {
+    v.removeAttribute('autoplay');
+    v.preload = 'auto';
+  }
 });
-function disableScroll() {
-    document.body.classList.add("stop-scrolling");
-}
-  
-function enableScroll() {
-    document.body.classList.remove("stop-scrolling");
-}
-function _playAudio(){
-    if(!ytMusicPlaying) {
-        if(document.body.contains(document.getElementById("song"))) {
-        var songEl = document.getElementById("song");
-        if(songEl.currentTime < 10 || songEl.currentTime >= 207){ songEl.currentTime = 10; }
-        songEl.play();
-        isYT = false;
-      } else {
-        isYT = true;
-            jQuery("iframe").each(function() {
-                if(this.id==='youtube-player') jQuery(this)[0].contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
-                //jQuery("#ytSound").animate({ bottom: "0px"}, 1500);
-            });
-      }
-        ytMusicPlaying = true;
-        discMusics.forEach((disc) => {
-            disc.classList.add('audioRotate');
-        })
+
+// Listener tab visibility yang aman
+document.addEventListener("visibilitychange", function() {
+  var songEl = document.getElementById("song");
+  if (!songEl) return;
+  if (document.hidden) {
+    if (!songEl.paused) {
+      songEl.pause();
+      updateAudioUI(false);
     }
-}
-function _pauseAudio(){
-    if(ytMusicPlaying) {
-        if(document.body.contains(document.getElementById("song"))) {
-        document.getElementById("song").pause();
-        isYT = false;
-      } else {
-        isYT = true;
-            jQuery("iframe").each(function() {
-                if(this.id==='youtube-player') jQuery(this)[0].contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-                //jQuery("#ytSound").animate({ bottom: "-320px"}, 1500);
-            });
-      }
-      ytMusicPlaying = false;
-        discMusics.forEach((disc) => {
-            disc.classList.remove('audioRotate');
-        })
-    } else {
-        
-        _playAudio()
+  } else {
+    if (isInvitationOpened && !userManuallyPaused && songEl.paused) {
+      songEl.play().then(function() {
+        updateAudioUI(true);
+      }).catch(function(){});
     }
-}
+  }
+});
 </script>				</div>
 				</div>
 				<div class="elementor-element elementor-element-7d796425 elementor-widget elementor-widget-spacer" data-id="7d796425" data-element_type="widget" data-e-type="widget" data-widget_type="spacer.default">
@@ -2970,14 +3114,10 @@ var WdsAudio = {"source":"url","audio_link":"nantikitasepertiini-batassenja.mp3"
 			</div>
 
 			<div id="wds-audio-box" style="display:none !important;">
-
-				
-										
-					<audio id="song">
-						<source src="nantikitasepertiini-batassenja.mp3" type="audio/mp3">
-					</audio>
-
-				
+				<audio id="song" preload="auto" playsinline webkit-playsinline src="nantikitasepertiini-batassenja.mp3">
+					<source src="nantikitasepertiini-batassenja.mp3" type="audio/mpeg">
+					<source src="nantikitasepertiini-batassenja.mp3" type="audio/mp3">
+				</audio>
 			</div>
 
 							</div>
@@ -3400,16 +3540,6 @@ var e="script#wp-emoji-settings",t=document.querySelector(e);if(!(t instanceof H
 jQuery('head').append( '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">' );
 </script>
 
-<script>
-const wdpAudio = document.body.contains(document.getElementById('song'))?document.getElementById('song'):false;
-document.addEventListener("visibilitychange", event => {
-  if (document.visibilityState === "visible") {
-    wdpAudio && wdpAudio.play();
-  } else {
-    wdpAudio && wdpAudio.pause();
-  }
-})
-</script>
 <style id="e-addons-template-dynamic-164270d-inline">.elementor:is(.e-post-4689,.e-loop-item-4689) .elementor-element.elementor-element-164270d:not(.elementor-motion-effects-element-type-background), .elementor:is(.e-post-4689,.e-loop-item-4689) .elementor-element.elementor-element-164270d > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-image: url("wp-content/uploads/jet-form-builder/cedebb6e872f539bef8c3f919874e9d7/2024/08/SAVE-THE-DATE-2.jpg");--e-bg-lazyload:url("wp-content/uploads/jet-form-builder/cedebb6e872f539bef8c3f919874e9d7/2024/08/SAVE-THE-DATE-2.jpg");background-position: center center;background-size: cover;}</style>	
 </body>
 </html>
